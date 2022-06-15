@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Controller
@@ -20,20 +21,20 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
 
-    @Value("${github.client_id}")
+    @Value("${client_id}")
     private String client_id;
 
-    @Value("${github.client_secret}")
+    @Value("${client_secret}")
     private String client_secret;
 
-    @Value("${github.redirect_uri}")
+    @Value("${redirect_uri}")
     private String redirect_uri;
 
     @GetMapping("/callback")
     public ModelAndView callback(@RequestParam(name = "code")String code,
-                                 @RequestParam(name = "state")String state) throws IOException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+                                 @RequestParam(name = "state")String state,
+                                 HttpServletRequest request) throws IOException {
+        ModelAndView modelAndView = new ModelAndView("redirect:/");
 
         //构造AccessTokenDTO对象
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -46,7 +47,12 @@ public class AuthorizeController {
         String token = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(token);
 
-        modelAndView.addObject("userName",githubUser.getName());
+        if (githubUser != null){
+            /*登录成功*/
+            request.getSession().setAttribute("user",githubUser);
+        }else {
+            /*登录失败*/
+        }
         return modelAndView;
     }
 }

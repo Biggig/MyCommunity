@@ -14,10 +14,10 @@ import java.io.IOException;
 @Component
 @PropertySource("classpath:accessGithub.properties")
 public class GithubProvider {
-    @Value("${github.token_url}")
+    @Value("${token_url}")
     private String token_url;
 
-    @Value("${github.user_url}")
+    @Value("${user_url}")
     private String user_url;
 
     /*获取令牌*/
@@ -25,9 +25,6 @@ public class GithubProvider {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
         OkHttpClient client = new OkHttpClient();
-
-        System.out.println("token_url: " + token_url);
-
         RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
         Request request = new Request.Builder()
                 .url(token_url)
@@ -35,7 +32,6 @@ public class GithubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String result = response.body().string();
-            System.out.println(result);
             String token = result.substring(StringUtils.indexOf(result,"=")+1,StringUtils.indexOf(result,"&"));
             System.out.println(token);
             return token;

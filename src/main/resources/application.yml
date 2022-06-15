@@ -1,2 +1,9 @@
 server:
   port: 8887
+spring:
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false

@@ -7,6 +7,9 @@
 [markdown语法](https://markdown.com.cn/basic-syntax/)  
 [Bootstrap](https://v3.bootcss.com/getting-started/)  
 [github 授权登录](https://docs.github.com/cn/developers/apps/building-oauth-apps/creating-an-oauth-app)  
+[OKHttp](https://square.github.io/okhttp/)  
+
 
 ## 工具
-https://git-scm.com/  
+[git](https://git-scm.com/)  
+[Visual Paradigm](https://www.visual-paradigm.com/cn/)  

@@ -7,3 +7,14 @@ spring:
     servlet:
       content-type: text/html
     cache: false
+  datasource:
+    username: root
+    password: 1234
+    url: jdbc:h2:~/myCommunity
+    driver-class-name: org.h2.Driver
+#mybatis配置
+mybatis:
+  type-aliases-package: com.huangzilin.mycommunity
+  configuration:
+    #下划线转驼峰
+    map-underscore-to-camel-case: true

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @PropertySource("classpath:accessGithub.properties")
@@ -24,7 +25,10 @@ public class GithubProvider {
     public String getAccessToken(AccessTokenDTO accessTokenDTO) throws IOException {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(20000, TimeUnit.MILLISECONDS)
+                .readTimeout(20000, TimeUnit.MILLISECONDS)
+                .build();
         RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
         Request request = new Request.Builder()
                 .url(token_url)

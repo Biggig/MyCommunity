@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
@@ -41,7 +39,6 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public ModelAndView callback(@RequestParam(name = "code")String code,
                                  @RequestParam(name = "state")String state,
-                                 HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView("redirect:/");
 

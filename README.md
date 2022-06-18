@@ -11,15 +11,14 @@
 [H2 database](https://www.h2database.com/html/main.html)  
 [Mybatis](https://mybatis.org/mybatis-3/zh/index.html)  
 [Spring DataSource](https://docs.spring.io/spring-boot/docs/current/reference/html/data.html#data)  
-[Flyway](https://flywaydb.org/documentation/)  
-
 
 ## 工具
 [Git](https://git-scm.com/)  
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)  
+[Flyway](https://flywaydb.org/documentation/)  
 
 ## 脚本
-````sql
+```sql
 create table COMMUNITY_USER
 (
     ID           INTEGER auto_increment,
@@ -34,4 +33,14 @@ create table COMMUNITY_USER
 
 create unique index COMMUNITY_USER_ACCOUNT_ID_UINDEX
     on COMMUNITY_USER (ACCOUNT_ID);
-````
+
+alter table COMMUNITY_USER
+    alter column ID INTEGER auto_increment;
+
+alter table COMMUNITY_USER
+    add bio varchar(256);
+```
+
+```bash
+mvn flyway:migrate
+```

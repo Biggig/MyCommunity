@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="css/myCommunity.css"/>
     <script src="js/jquery-3.6.0.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <title>无聊社区</title>
@@ -16,18 +17,19 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">无聊社区</span>
             </button>
-            <a class="navbar-brand" href="#">无聊社区</a>
+            <a class="navbar-brand" href="/">无聊社区</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="搜索问题">
+                        <input type="text" class="form-control" placeholder="搜索问题">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://localhost:8887/publish">发布</a></li>
                 <li><a href="https://github.com/login/oauth/authorize?client_id=a61a1ef92f9085dd485c&redirect_uri=http://localhost:8887/callback&state=1" th:if="not ${session.user}">登录</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:if="${session.user}" th:text="${session.user.getName()}"><span class="caret">None</span></a>
@@ -43,5 +45,30 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<div class="container-fluid main">
+    <!--规定了不同尺寸下的左右部件的比例-->
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <!--添加图标-->
+        <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 发现</h3>
+        <hr>
+        <div class="media"  th:each="question : ${questions}">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading" th:text="${question.title}"></h4>
+                <span th:text="${question.description}"></span><br>
+                <span class="text-desc">
+                    <span th:text="${question.commentCount}"></span>个回复 · <span th:text="${question.viewCount}"></span>次浏览 · <span th:text="${question.likeCount}"></span>个点赞 · <span th:text="${#calendars.format(question.gmtModified,'yyyy-MM-dd HH:mm')}">13 May 2011</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+        <h3>热门话题</h3>
+    </div>
+</div>
 </body>
 </html>

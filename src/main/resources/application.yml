@@ -10,7 +10,7 @@ spring:
   datasource:
     username: root
     password: 1234
-    url: jdbc:h2:file:D:/MyCommunity/MyCommunity/db/myCommunity
+    url: jdbc:h2:file:D:/MyCommunity/MyCommunity/db/myCommunity;FILE_LOCK=SOCKET
     driver-class-name: org.h2.Driver
 #mybatis配置
 mybatis:

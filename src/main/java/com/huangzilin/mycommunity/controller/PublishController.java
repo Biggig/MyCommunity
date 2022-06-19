@@ -62,12 +62,13 @@ public class PublishController {
 
         CommunityUser user = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie:cookies) {
-            if("token".equals(cookie.getName())){
-                /*cookie中存在token，证明处于登录状态，从数据库中读取用户信息*/
-                String myToken = cookie.getValue();
-                user = userMapper.findUserByToken(myToken);
-
+        if(cookies != null && cookies.length != 0){
+            for (Cookie cookie:cookies) {
+                if("token".equals(cookie.getName())){
+                    /*cookie中存在token，证明处于登录状态，从数据库中读取用户信息*/
+                    String myToken = cookie.getValue();
+                    user = userMapper.findUserByToken(myToken);
+                }
             }
         }
         if (user == null){
@@ -84,9 +85,10 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(System.currentTimeMillis());
         question.setCreator(user.getId());
+        questionMapper.insertQuestion(question);
 
         /*成功添加，返回首页*/
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 }

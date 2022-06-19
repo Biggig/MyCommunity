@@ -61,7 +61,7 @@ public class AuthorizeController {
             String myToken = UUID.randomUUID().toString();
             if(userMapper.findUserByAccountId(accountId) != null){
                 /*用户已在数据库中*/
-                userMapper.updateUserByAccountId(accountId, myToken, System.currentTimeMillis());
+                userMapper.updateUserByAccountId(accountId, myToken, System.currentTimeMillis(), githubUser.getAvatarUrl());
             }else {
                 /*用户不在数据库中*/
                 /*把user放进数据库*/
@@ -71,6 +71,8 @@ public class AuthorizeController {
                 user.setAccountId(accountId);
                 user.setGmtCreate(System.currentTimeMillis());
                 user.setGmtModified(System.currentTimeMillis());
+                user.setAvatarUrl(githubUser.getAvatarUrl());
+
                 userMapper.insertUser(user);
 
             }

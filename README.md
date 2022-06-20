@@ -18,6 +18,7 @@
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)  
 [Flyway](https://flywaydb.org/documentation/)  
 [Lombok](https://projectlombok.org/)  
+[LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=zh-CN)
 
 ## 脚本
 ```sql

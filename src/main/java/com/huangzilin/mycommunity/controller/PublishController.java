@@ -4,6 +4,7 @@ import com.huangzilin.mycommunity.mapper.QuestionMapper;
 import com.huangzilin.mycommunity.mapper.UserMapper;
 import com.huangzilin.mycommunity.po.CommunityUser;
 import com.huangzilin.mycommunity.po.Question;
+import com.huangzilin.mycommunity.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ public class PublishController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private LoginService loginService;
     @GetMapping("/publish")
     public ModelAndView publishProblem(){
         ModelAndView modelAndView = new ModelAndView();
@@ -60,17 +63,7 @@ public class PublishController {
             return modelAndView;
         }
 
-        CommunityUser user = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length != 0){
-            for (Cookie cookie:cookies) {
-                if("token".equals(cookie.getName())){
-                    /*cookie中存在token，证明处于登录状态，从数据库中读取用户信息*/
-                    String myToken = cookie.getValue();
-                    user = userMapper.findUserByToken(myToken);
-                }
-            }
-        }
+        CommunityUser user = loginService.checkLogin(request);
         if (user == null){
             /*有错误停留在publish页面*/
             modelAndView.addObject("error", "用户未登录");

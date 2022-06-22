@@ -5,6 +5,7 @@ import com.huangzilin.mycommunity.dto.GithubUser;
 import com.huangzilin.mycommunity.mapper.UserMapper;
 import com.huangzilin.mycommunity.po.CommunityUser;
 import com.huangzilin.mycommunity.provider.GithubProvider;
+import com.huangzilin.mycommunity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
@@ -36,6 +38,8 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
     @GetMapping("/callback")
     public ModelAndView callback(@RequestParam(name = "code")String code,
                                  @RequestParam(name = "state")String state,
@@ -54,33 +58,24 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(token);
 
         if (githubUser != null){
-            /*登录成功/
-
-            /*使用accountId查找数据库，若有user，则执行更新，否则执行插入*/
-            String accountId = String.valueOf(githubUser.getId());
-            String myToken = UUID.randomUUID().toString();
-            if(userMapper.findUserByAccountId(accountId) != null){
-                /*用户已在数据库中*/
-                userMapper.updateUserByAccountId(accountId, myToken, System.currentTimeMillis(), githubUser.getAvatarUrl());
-            }else {
-                /*用户不在数据库中*/
-                /*把user放进数据库*/
-                CommunityUser user = new CommunityUser();
-                user.setToken(myToken);
-                user.setName(githubUser.getName());
-                user.setAccountId(accountId);
-                user.setGmtCreate(System.currentTimeMillis());
-                user.setGmtModified(System.currentTimeMillis());
-                user.setAvatarUrl(githubUser.getAvatarUrl());
-
-                userMapper.insertUser(user);
-
-            }
+            /*登录成功，更新数据库用户信息*/
+            String myToken = userService.updateUser(githubUser);
             response.addCookie(new Cookie("token", myToken));
-
         }else {
             /*登录失败*/
         }
+        return modelAndView;
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request,
+                               HttpServletResponse response){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/");
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return modelAndView;
     }
 }

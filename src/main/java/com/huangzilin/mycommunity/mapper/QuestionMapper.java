@@ -1,10 +1,7 @@
 package com.huangzilin.mycommunity.mapper;
 
 import com.huangzilin.mycommunity.po.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -28,4 +25,12 @@ public interface QuestionMapper {
     List<Question> findListByCreator(@Param("creator") Integer creator,
                                      @Param("offset") Integer offset,
                                      @Param("size") Integer size);
+    @Select("select * from question where id = #{id}")
+    Question findQuestionById(@Param("id") Integer id);
+
+    @Update("update question set view_count = view_count + 1 where id = #{id}")
+    void addQuestionView(@Param("id") Integer id);
+
+    @Update("update question set title = #{title}, description = #{description}, tag = #{tag} where id = #{id}")
+    void updateQuestion(String title, String description, String tag, Integer id);
 }

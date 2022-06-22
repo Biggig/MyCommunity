@@ -29,3 +29,11 @@ body{
 .section-profile{
     margin-top: 15px;
 }
+
+.community-header{
+    font-size: 25px;
+}
+
+.community-content{
+    font-size: 15px;
+}

@@ -19,13 +19,12 @@ public class PaginationDTO {
 
     /**
      *
-     * @param num  问题总数
-     * @param page 当前页数
-     * @param size 每页问题数
+     * @param total_page    总页数
+     * @param page          要访问的页数
+     * @param size          每页问题数量
      */
-    public void setPagination(Integer num, Integer page, Integer size) {
+    public void setPagination(Integer total_page, Integer page, Integer size) {
         pages = new ArrayList<>();/*显示的页码*/
-        int total_page = num % size == 0 ? num / size : num / size + 1; /*页面总数*/
         /*设置当前页数*/
         this.setCurPage(page);
         this.setTolPage(total_page);

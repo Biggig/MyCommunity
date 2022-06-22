@@ -1,29 +1,37 @@
 package com.huangzilin.mycommunity.controller;
 
+import com.huangzilin.mycommunity.dto.QuestionDTO;
 import com.huangzilin.mycommunity.mapper.QuestionMapper;
 import com.huangzilin.mycommunity.mapper.UserMapper;
 import com.huangzilin.mycommunity.po.CommunityUser;
 import com.huangzilin.mycommunity.po.Question;
-import com.huangzilin.mycommunity.service.LoginService;
+import com.huangzilin.mycommunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
     @Autowired
-    private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
+    private QuestionService questionService;
 
-    @Autowired
-    private LoginService loginService;
+    @GetMapping("/publish/{id}")
+    public ModelAndView editProblem(@PathVariable(name = "id")Integer id){
+        ModelAndView modelAndView = new ModelAndView();
+        QuestionDTO question = questionService.findQuestionById(id);
+        modelAndView.addObject("title", question.getTitle());
+        modelAndView.addObject("description", question.getDescription());
+        modelAndView.addObject("tag", question.getTag());
+        modelAndView.addObject("id", question.getId());
+        modelAndView.setViewName("publish");
+        return modelAndView;
+    }
     @GetMapping("/publish")
     public ModelAndView publishProblem(){
         ModelAndView modelAndView = new ModelAndView();
@@ -35,9 +43,10 @@ public class PublishController {
     /*接收前端“问题”表单信息，加入到数据库*/
     @PostMapping("/publish")
     public ModelAndView addProblem(
-            @RequestParam("title")String title,
-            @RequestParam("description")String description,
-            @RequestParam("tag")String tag,
+            @RequestParam(value = "title", required = false)String title,
+            @RequestParam(value = "description", required = false)String description,
+            @RequestParam(value = "tag", required = false)String tag,
+            @RequestParam(value = "id", required = false, defaultValue = "0")Integer id,
             HttpServletRequest request
     ){
         ModelAndView modelAndView = new ModelAndView();
@@ -63,25 +72,19 @@ public class PublishController {
             return modelAndView;
         }
 
-        CommunityUser user = loginService.checkLogin(request);
+        CommunityUser user = (CommunityUser) request.getSession().getAttribute("user");
         if (user == null){
             /*有错误停留在publish页面*/
             modelAndView.addObject("error", "用户未登录");
             modelAndView.setViewName("publish");
             return modelAndView;
         }
+        questionService.insertOrUpdateQuestion(title, description, tag, user.getId(), id);
 
-        Question question = new Question();
-        question.setTitle(title);
-        question.setDescription(description);
-        question.setTag(tag);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(System.currentTimeMillis());
-        question.setCreator(user.getId());
-        questionMapper.insertQuestion(question);
 
         /*成功添加，返回首页*/
-        modelAndView.setViewName("index");
+        modelAndView.clear();
+        modelAndView.setViewName("redirect:/");
         return modelAndView;
     }
 }

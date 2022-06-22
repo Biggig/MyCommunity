@@ -15,9 +15,7 @@
     <!--规定了不同尺寸下的左右部件的比例-->
     <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
         <!--添加图标-->
-        <h3>
-            <strong th:text="${sectionName}"></strong>
-        </h3>
+        <h3 th:text="${sectionName}" class="community-header"></h3>
         <hr>
         <div class="media"  th:each="question : ${pagination.questions}">
             <div class="media-left">
@@ -26,7 +24,9 @@
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading" th:text="${question.title}"></h4>
+                <h4 class="media-heading">
+                    <a th:href="@{'/question/' + ${question.id}}" th:text="${question.title}"></a>
+                </h4>
                 <span th:text="${question.description}"></span><br>
                 <span class="text-desc">
                     <span th:text="${question.commentCount}"></span>个回复 · <span th:text="${question.viewCount}"></span>次浏览 · <span th:text="${question.likeCount}"></span>个点赞 · <span th:text="${#calendars.format(question.gmtModified,'yyyy-MM-dd HH:mm')}">13 May 2011</span>
@@ -36,24 +36,24 @@
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li th:if="${pagination.showFirst}">
-                    <a href="/" th:href="@{http://localhost:8887/profile/questions(page=1)}" aria-label="Previous">
+                    <a href="/" th:href="@{'/profile/'+${section}(page=${1})}" aria-label="Previous">
                         <span aria-hidden="true">&lt;&lt;</span>
                     </a>
                 </li>
                 <li th:if="${pagination.showPrevious}">
-                    <a href="/" th:href="@{http://localhost:8887/profile/questions(page=${pagination.curPage-1})}" aria-label="Previous">
+                    <a href="/" th:href="@{'/profile/'+${section}(page=${pagination.curPage-1})}" aria-label="Previous">
                         <span aria-hidden="true">&lt;</span>
                     </a>
                 </li>
                 <li th:each="page: ${pagination.pages}" th:class="${pagination.curPage == page}? 'active' : ''">
-                    <a href="/" th:href="@{http://localhost:8887/profile/questions(page=${page})}" th:text="${page}"></a></li>
+                    <a href="/" th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a></li>
                 <li th:if="${pagination.showNext}">
-                    <a href="/" th:href="@{http://localhost:8887/profile/questions(page=${pagination.curPage+1})}" aria-label="Next">
+                    <a href="/" th:href="@{'/profile/'+${section}(page=${pagination.curPage+1})}" aria-label="Next">
                         <span aria-hidden="true">&gt;</span>
                     </a>
                 </li>
                 <li th:if="${pagination.showLast}">
-                    <a href="/" th:href="@{http://localhost:8887/profile/questions(page=${pagination.tolPage})}" aria-label="Next">
+                    <a href="/" th:href="@{'/profile/'+${section}(page=${pagination.tolPage})}" aria-label="Next">
                         <span aria-hidden="true">&gt;&gt;</span>
                     </a>
                 </li>
@@ -62,14 +62,13 @@
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
         <div class="list-group  section-profile">
-            <a href="http://localhost:8887/profile/questions"  th:class="${section == 'questions'}? 'list-group-item active' : 'list-group-item'">我的问题</a>
-            <a href="http://localhost:8887/profile/replies"  th:class="${section == 'replies'}? 'list-group-item active' : 'list-group-item'">
+            <a href="http://localhost:8887/profile/questions"  th:class="${section == 'questions'}? 'list-group-item active community-content' : 'list-group-item community-content'">
+                我的问题
+            </a>
+            <a href="http://localhost:8887/profile/replies"  th:class="${section == 'replies'}? 'list-group-item active community-content' : 'list-group-item community-content'">
                 最新回复
                 <span class="badge">4</span>
             </a>
-            <a href="#" class="list-group-item">Morbi leo risus</a>
-            <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-            <a href="#" class="list-group-item">Vestibulum at eros</a>
         </div>
     </div>
 </div>

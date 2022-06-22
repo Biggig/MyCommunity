@@ -21,6 +21,23 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    public void insertOrUpdateQuestion(String title, String description, String tag, Integer creator, Integer questionId){
+        if(questionId == 0){
+            /*没有回传id，是新添加问题*/
+            Question question = new Question();
+            question.setTitle(title);
+            question.setDescription(description);
+            question.setTag(tag);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(System.currentTimeMillis());
+            question.setCreator(creator);
+            questionMapper.insertQuestion(question);
+        }else {
+            /*有回传id，是修改问题*/
+            questionMapper.updateQuestion(title, description, tag, questionId);
+        }
+    }
+
     public PaginationDTO findList(Integer page, Integer size) {
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         Integer num = questionMapper.count();/*问题总数*/
@@ -38,7 +55,7 @@ public class QuestionService {
         PaginationDTO paginationDTO = new PaginationDTO();
 
         for(Question question:questions){
-            CommunityUser user = userMapper.findUserByID(question.getCreator());
+            CommunityUser user =    userMapper.findUserByID(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             /*赋值*/
             BeanUtils.copyProperties(question, questionDTO);
@@ -48,7 +65,7 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOS);
 
 
-        paginationDTO.setPagination(num, page, size);
+        paginationDTO.setPagination(total_page, page, size);
 
         return paginationDTO;
     }
@@ -81,9 +98,20 @@ public class QuestionService {
         }
 
         paginationDTO.setQuestions(questionDTOS);
-        paginationDTO.setPagination(num, page, size);
+        paginationDTO.setPagination(total_page, page, size);
         return paginationDTO;
     }
 
 
+    public QuestionDTO findQuestionById(Integer questionId) {
+        /*浏览数加1*/
+        questionMapper.addQuestionView(questionId);
+        Question question = questionMapper.findQuestionById(questionId);
+        CommunityUser user = userMapper.findUserByID(question.getCreator());
+        QuestionDTO questionDTO = new QuestionDTO();
+        /*赋值*/
+        BeanUtils.copyProperties(question, questionDTO);
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
 }

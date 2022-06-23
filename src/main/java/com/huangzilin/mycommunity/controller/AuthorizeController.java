@@ -2,10 +2,8 @@ package com.huangzilin.mycommunity.controller;
 
 import com.huangzilin.mycommunity.dto.AccessTokenDTO;
 import com.huangzilin.mycommunity.dto.GithubUser;
-import com.huangzilin.mycommunity.mapper.UserMapper;
-import com.huangzilin.mycommunity.po.CommunityUser;
 import com.huangzilin.mycommunity.provider.GithubProvider;
-import com.huangzilin.mycommunity.service.UserService;
+import com.huangzilin.mycommunity.service.CommunityUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -18,7 +16,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 @Controller
 @PropertySource(value = {"classpath:accessGithub.properties"})//从此文件中读取登录github的相关数据
@@ -36,10 +33,7 @@ public class AuthorizeController {
     private String redirect_uri;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private UserService userService;
+    private CommunityUserService communityUserService;
     @GetMapping("/callback")
     public ModelAndView callback(@RequestParam(name = "code")String code,
                                  @RequestParam(name = "state")String state,
@@ -59,7 +53,7 @@ public class AuthorizeController {
 
         if (githubUser != null){
             /*登录成功，更新数据库用户信息*/
-            String myToken = userService.updateUser(githubUser);
+            String myToken = communityUserService.updateUser(githubUser);
             response.addCookie(new Cookie("token", myToken));
         }else {
             /*登录失败*/

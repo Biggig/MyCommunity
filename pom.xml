@@ -74,7 +74,11 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mybatis.dynamic-sql</groupId>
+			<artifactId>mybatis-dynamic-sql</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -92,6 +96,32 @@
 					<user>root</user>
 					<password>1234</password>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>2.1.210</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.4.1</version>
+				<configuration>
+					<!--允许移动生成的文件-->
+					<verbose>true</verbose>
+					<!--允许覆盖生成的文件-->
+					<overwrite>true</overwrite>
+				</configuration>
+				<executions>
+					<execution>
+						<id>Generate MyBatis Artifacts</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 				<dependencies>
 					<dependency>
 						<groupId>com.h2database</groupId>

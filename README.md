@@ -18,7 +18,8 @@
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)  
 [Flyway](https://flywaydb.org/documentation/)  
 [Lombok](https://projectlombok.org/)  
-[LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=zh-CN)
+[LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=zh-CN)  
+[MyBatis Generator](https://mybatis.org/generator/)
 
 ## 脚本
 ```sql
@@ -43,4 +44,5 @@ alter table COMMUNITY_USER
 
 ```bash
 mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ```

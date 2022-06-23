@@ -1,0 +1,19 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="dsql" targetRuntime="MyBatis3DynamicSql">
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:file:D:/MyCommunity/MyCommunity/db/myCommunity;FILE_LOCK=SOCKET"
+                        userId="root"
+                        password="1234"/>
+
+        <javaModelGenerator targetPackage="com.huangzilin.mycommunity.po" targetProject="src/main/java"/>
+
+        <javaClientGenerator targetPackage="com.huangzilin.mycommunity.mapper" targetProject="src/main/java"/>
+
+        <table tableName="community_user" />
+        <table tableName="question" />
+
+    </context>
+</generatorConfiguration>

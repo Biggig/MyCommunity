@@ -1,10 +1,7 @@
 package com.huangzilin.mycommunity.controller;
 
 import com.huangzilin.mycommunity.dto.QuestionDTO;
-import com.huangzilin.mycommunity.mapper.QuestionMapper;
-import com.huangzilin.mycommunity.mapper.UserMapper;
 import com.huangzilin.mycommunity.po.CommunityUser;
-import com.huangzilin.mycommunity.po.Question;
 import com.huangzilin.mycommunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
